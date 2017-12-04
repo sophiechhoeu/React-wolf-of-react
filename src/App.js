@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import StockInfo from './components/Stockinfo';
-import { loadQuoteForStock, loadCompanyLogoForStock } from './api/iex'
+import { loadQuoteForStock, loadCompanyLogoForStock } from './api/iex';
+import Error from './components/Error'
 
 // if there is a then you get a promise
 
@@ -10,8 +11,9 @@ import { loadQuoteForStock, loadCompanyLogoForStock } from './api/iex'
 class App extends Component {
   state = {
       symbol: 'F',
-      quote: null
-  }
+      quote: null,
+      error: false
+  };
 
 // it initially loads an empty page, once it's completed do this action component did mount because it has a loadQuote
 // ie once the quote is completed loading do this action
@@ -22,13 +24,14 @@ componentDidMount() {
 
 loadQuote(){
   loadQuoteForStock(this.state.symbol).then((quote) => {console.log(quote)
-    this.setState({quote: quote})
+    this.setState({quote: quote, error: false})
+    // console.log("loadquote",this.state.error)
   })
   .catch((err) => {
-  this.setState({
-  error: 'fjf'
- })
+    this.setState({error: true, quote: null})
+
 })
+
   // {console.log(err)})
 }
 
@@ -46,17 +49,17 @@ handleButtonClick = (event) => {
   render() {
     return (
       <div className="App">
-        <h1>Wolf of React</h1>
-        <input
-          placeholder="Enter symbol"
-          value={this.state.symbol}
-          onChange={ this.handleSymbolChange }
-        />
-        <button onClick={this.handleButtonClick}>Get Quote</button>
-        <StockInfo {...this.state.quote} />
+      <h1>Wolf of React</h1>
+      <input
+      placeholder="Enter symbol"
+      value={this.state.symbol}
+      onChange={ this.handleSymbolChange }
+      />
+      <button onClick={this.handleButtonClick}>Get Quote</button>
+      <Error error= {this.state.error}/>
+      <StockInfo  {...this.state.quote} />
       </div>
-    );
+    )
   }
 }
-
 export default App;
