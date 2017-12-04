@@ -53,7 +53,7 @@ handleButtonClick = (event) => {
           onChange={ this.handleSymbolChange }
         />
         <button onClick={this.handleButtonClick}>Get Quote</button>
-        <StockInfo {...this.state.quote}/>
+        <StockInfo {...this.state.quote} />
       </div>
     );
   }
